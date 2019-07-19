@@ -3,7 +3,6 @@
  */
 
 const path = require('path');
-const fs = require('fs');
 
 /* User defined constants */
 
@@ -27,7 +26,9 @@ const fs = require('fs');
 /* End of user defined constants */
 
 const reactVersion = react && require('react').version; // eslint-disable-line global-require
-const importPath = fs.existsSync('./jsconfig.json') ? require('./jsconfig.json').compilerOptions.baseUrl : '.';
+let importPath;
+try { importPath = require('./jsconfig.json').compilerOptions.baseUrl; }
+catch { importPath = '.'; }
 
 const env = process.env.NODE_ENV || '';
 const isInProductionMode = env.includes('production');
@@ -37,6 +38,8 @@ const style = (checkStyling || isInStylingMode) && !isStylingExplicitlyDisabled 
 
 const production_warn = isInProductionMode ? 'warn' : 'off';
 const production_error = isInProductionMode ? 'error' : 'warn';
+
+console.log(importPath)
 
 module.exports = {
 	env: {
