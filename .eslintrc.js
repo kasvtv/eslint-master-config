@@ -1,5 +1,5 @@
 /* INSTALL DEPS:
-   npm i -D eslint eslint-plugin-jest eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks
+   npm i -D eslint babel-eslint eslint-plugin-jest eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks
  */
 
 const path = require('path');
@@ -15,7 +15,7 @@ const path = require('path');
 	const babel = true;
 
 	/* Frameworks and libraries: */
-	const react = true;
+	const react = false;
 	const jquery = false;
 	const jest = false;
 
