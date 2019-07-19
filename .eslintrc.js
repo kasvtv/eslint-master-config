@@ -39,8 +39,6 @@ const style = (checkStyling || isInStylingMode) && !isStylingExplicitlyDisabled 
 const production_warn = isInProductionMode ? 'warn' : 'off';
 const production_error = isInProductionMode ? 'error' : 'warn';
 
-console.log(importPath)
-
 module.exports = {
 	env: {
 		es6: ecmaVersion >= 6,
