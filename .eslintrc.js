@@ -331,7 +331,7 @@ module.exports = {
 			'always',
 		],
 		'object-property-newline': [style, { allowAllPropertiesOnSameLine: true }],
-		'object-shorthand': style,
+		'object-shorthand': (babel || minEcmaVersion > 5) ? style : 'off',
 		'one-var': 'off',
 		'one-var-declaration-per-line': 'off',
 		'operator-assignment': 'off',
