@@ -3,12 +3,12 @@ const path = require('path')
 /* User defined constants */
 
 /* Environment: */
-const ecmaVersion = 9
-const minEcmaVersion = 5
-const browser = true
+const ecmaVersion = 10
+const minSupportedEcmaVersion = 9
+const browser = false
 const imports = true
 const node = true
-const babel = true
+const babel = false
 
 /* Frameworks and libraries: */
 const react = false
@@ -115,7 +115,7 @@ module.exports = {
           objects: 'always-multiline',
           imports: 'always-multiline',
           exports: 'always-multiline',
-          functions: minEcmaVersion >= 6 ? 'always-multiline' : 'ignore',
+          functions: minSupportedEcmaVersion >= 6 ? 'always-multiline' : 'ignore',
         },
       ],
       'comma-spacing': style,
@@ -338,7 +338,7 @@ module.exports = {
       ],
       'object-curly-spacing': [style, 'always'],
       'object-property-newline': [style, { allowAllPropertiesOnSameLine: true }],
-      'object-shorthand': babel || minEcmaVersion > 5 ? 'warn' : 'off',
+      'object-shorthand': babel || minSupportedEcmaVersion > 5 ? 'warn' : 'off',
       'one-var': ['error', 'never'],
       'one-var-declaration-per-line': 'off',
       'operator-assignment': 'off',
@@ -517,7 +517,7 @@ module.exports = {
       'react/no-unused-state': 'warn',
       'react/no-unused-prop-types': 'warn',
       'react/no-will-update-set-state': 'error',
-      'react/prefer-es6-class': minEcmaVersion >= 6 ? 'error' : 'off',
+      'react/prefer-es6-class': minSupportedEcmaVersion >= 6 ? 'error' : 'off',
       'react/prefer-read-only-props': 'off',
       'react/prefer-stateless-function': 'warn',
       'react/prop-types': 'off',
