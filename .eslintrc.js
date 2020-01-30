@@ -626,7 +626,22 @@ module.exports = {
       'node/process-exit-as-throw': 'off',
       'node/shebang': 'off',
     },
-    ecmaVersion >= 6 && {},
+    ecmaVersion >= 6 && {
+      'promise/catch-or-return': ['warn', { allowThen: true, allowFinally: true }],
+      'promise/no-return-wrap': 'off',
+      'promise/param-names': 'warn',
+      'promise/always-return': 'off',
+      'promise/no-native': 'off',
+      'promise/no-nesting': 'warn',
+      'promise/no-promise-in-callback': 'off',
+      'promise/no-callback-in-promise': 'warn',
+      'promise/avoid-new': 'off',
+      'promise/no-new-statics': 'error',
+      'promise/no-return-in-finally': 'error',
+      'promise/valid-params': 'error',
+      'promise/prefer-await-to-then': 'off',
+      'promise/prefer-await-to-callbacks': 'off',
+    },
   ),
   settings: {
     'import/resolver': {
