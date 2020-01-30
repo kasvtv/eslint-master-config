@@ -1,5 +1,3 @@
-# eslint-master-config
+# js-lint-format-boilerplate
 
-* Drop into your project's root folder
-* Copy and run the second line of the file in your terminal
-* If necessary: adjust user defined constants at the beginning of the file
+* Copy parts from package.json.snippet into your existing package.json

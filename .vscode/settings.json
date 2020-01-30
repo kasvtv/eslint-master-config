@@ -1,0 +1,23 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.trimAutoWhitespace": false,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "javascript.validate.enable": false,
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.formatOnSave": true
+  },
+  "[yaml]": {
+    "editor.formatOnSave": true
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.serverless": true,
+    ".github": true,
+    ".vscode": true
+  },
+  "eslint.enable": true
+}
