@@ -3,8 +3,8 @@ const path = require('path')
 /* User defined constants */
 
 /* Environment: */
-const ecmaVersion = 10
-const minSupportedEcmaVersion = 9
+const ecmaVersion = 11
+const minSupportedEcmaVersion = 10
 const browser = false
 const imports = true
 const node = true
@@ -66,7 +66,9 @@ module.exports = {
     imports && 'import',
     node && 'node',
     ecmaVersion >= 6 && 'promise',
-  ].flat(),
+  ]
+    .flat()
+    .filter(Boolean),
   rules: Object.assign(
     {
       'accessor-pairs': 'warn',
@@ -636,10 +638,12 @@ module.exports = {
     react: {
       version: reactVersion,
     },
+    minSupportedEcmaVersion,
   },
 }
 
 /* To get all rules (to check for updates/deprecations), goto: https://eslint.org/docs/rules/
  * Then: [...document.querySelectorAll("table.rule-list td:nth-child(3) p a")].map(x => x.innerHTML)
  */
-console.log('config parsed')
+
+console.log('eslint config parsed')

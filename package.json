@@ -8,7 +8,7 @@
     "*.js": "cross-env NODE_ENV=production eslint"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage --collectCoverageFrom=**/*.js",
     "lint": "cross-env NODE_ENV=production eslint .",
     "lint:staged": "lint-staged",
     "format": "pretty-quick --staged",
@@ -30,9 +30,5 @@
     "lint-staged": "^10.0.4",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1"
-  },
-  "eslintIgnore": [
-    "!.eslintrc.js",
-    "node_modules"
-  ]
+  }
 }
