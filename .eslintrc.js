@@ -46,11 +46,11 @@ module.exports = {
     jest,
     jquery,
   },
-  extends: [].concat(
+  extends: [
     'eslint:recommended',
-    jest ? 'plugin:jest/recommended' : [],
-    react ? 'plugin:react/recommended' : [],
-  ),
+    jest && 'plugin:jest/recommended',
+    react && 'plugin:react/recommended',
+  ].filter(Boolean),
   parser: babel ? 'babel-eslint' : null,
   parserOptions: {
     sourceType: 'module',
