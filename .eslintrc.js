@@ -453,7 +453,6 @@ module.exports = {
       'jest/no-alias-methods': style,
       'jest/no-disabled-tests': 'warn',
       'jest/no-commented-out-tests': production_error,
-      'jest/no-empty-title': 'warn',
       'jest/no-focused-tests': production_error, // circumvents whole test suite
       'jest/no-hooks': 'off',
       'jest/no-identical-title': 'warn',
