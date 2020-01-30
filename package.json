@@ -5,7 +5,7 @@
     }
   },
   "lint-staged": {
-    "*.js": "cross-env NODE_ENV=production eslint"
+    "*.{js,jsx}": "cross-env NODE_ENV=production eslint"
   },
   "scripts": {
     "test": "jest --coverage --collectCoverageFrom=**/*.js",
