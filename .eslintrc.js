@@ -223,7 +223,7 @@ module.exports = {
       'no-extra-bind': 'warn', // is "suggestion" -> not func eq
       'no-extra-label': 'off', // is "suggestion" -> annoying  // no-labels
       'no-extra-parens': 'off', // useful for unambiguity
-      'no-extra-semi': 'warn',
+      'no-extra-semi': 'off',
       'no-fallthrough': 'warn',
       'no-floating-decimal': style,
       'no-func-assign': 'error',
