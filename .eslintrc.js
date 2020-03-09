@@ -79,7 +79,9 @@ module.exports = {
     {
       files: ['.*.js', '*.config.js'],
       rules: Object.assign(
-        {},
+        {
+          'no-console': 'off',
+        },
         imports && {
           'import/no-commonjs': 'off',
         },
