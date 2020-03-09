@@ -16,6 +16,12 @@ const react = dependencies.includes('react')
 const jquery = dependencies.includes('jquery')
 const jest = dependencies.includes('jest')
 const style = dependencies.includes('prettier') ? 'off' : 'warn'
+const tsPrefix = typescript ? '@typescript-eslint/' : ''
+
+const indentSetting = 'tab'
+const semiSetting = 'always'
+const ecmaVersion = 11
+const minSupportedEcmaVersion = babel || typescript || node || react ? ecmaVersion : 5 // this is an assumption!
 
 let configFile
 try {
@@ -26,19 +32,11 @@ try {
 }
 const { strict, strictNullChecks, baseUrl } = configFile.compilerOptions || {}
 const esModules = configFile.compilerOptions.module.toLowerCase().startsWith('es')
-const modulePaths = baseUrl ? [path.resolve(__dirname, baseUrl)] : []
-const moduleExtensions = ['.js', '.jsx', '.json', '.node'].concat(typescript ? ['.ts', '.tsx'] : [])
-const tsPrefix = typescript ? '@typescript-eslint/' : ''
 
 const env = process.env.NODE_ENV || ''
 const isInProductionMode = env.includes('production')
 const production_warn = isInProductionMode ? 'warn' : 'off'
 const production_error = isInProductionMode ? 'error' : 'warn'
-
-const indentSetting = 'tab'
-const semiSetting = 'always'
-const ecmaVersion = 11
-const minSupportedEcmaVersion = babel || typescript || node || react ? ecmaVersion : 5 // this is an assumption!
 
 module.exports = {
   root: true,
@@ -752,10 +750,19 @@ module.exports = {
   ),
   settings: {
     'import/resolver': browser
-      ? { webpack: { config: 'webpack.config.js' } }
+      ? {
+          webpack: { config: 'webpack.config.js' },
+        }
       : typescript
-      ? { typescript: {} }
-      : { node: { paths: modulePaths, extensions: moduleExtensions } },
+      ? {
+          typescript: {},
+        }
+      : {
+          node: {
+            paths: baseUrl ? [baseUrl] : [],
+            extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.node'],
+          },
+        },
     react: {
       version: 'detect',
     },
