@@ -659,6 +659,7 @@ module.exports = {
       'node/no-unsupported-features/node-builtins': 'error',
       'node/process-exit-as-throw': 'off',
       'node/shebang': 'off',
+      'node/no-deprecated-api': 'error',
     },
     promise && {
       'promise/always-return': 'off',
