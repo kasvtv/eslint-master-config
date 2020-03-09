@@ -1,4 +1,3 @@
-/* eslint-disable import/no-commonjs */
 const options = {
   preset: 'ts-jest/presets/js-with-ts',
 }

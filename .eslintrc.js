@@ -1,4 +1,3 @@
-/* eslint-disable import/no-commonjs */
 const path = require('path') // eslint-disable-line
 const packageJson = require('./package.json') // eslint-disable-line
 
@@ -76,6 +75,20 @@ module.exports = {
   ]
     .flat()
     .filter(Boolean),
+  overrides: [
+    {
+      files: ['.*.js', '*.config.js'],
+      rules: Object.assign(
+        {},
+        imports && {
+          'import/no-commonjs': 'off',
+        },
+        typescript && {
+          '@typescript-eslint/no-unnecessary-condition': 'off',
+        },
+      ),
+    },
+  ],
   rules: Object.assign(
     {
       'accessor-pairs': 'warn',
@@ -705,9 +718,7 @@ module.exports = {
       '@typescript-eslint/no-this-alias': 'error',
       '@typescript-eslint/no-type-alias': 'off',
       '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
-      '@typescript-eslint/no-unnecessary-condition': __filename.endsWith('.eslintrc.js')
-        ? 'off'
-        : 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'error',
       '@typescript-eslint/no-unnecessary-qualifier': 'error',
       '@typescript-eslint/no-unnecessary-type-arguments': 'warn',
       '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
