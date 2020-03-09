@@ -1,19 +1,23 @@
 {
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "npm run precommit"
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": "cross-env NODE_ENV=production eslint"
+    "*.{ts,js,tsx,jsx}": "cross-env NODE_ENV=production eslint"
   },
   "scripts": {
-    "test": "jest --coverage --collectCoverageFrom=**/*.js",
+    "test": "jest --testPathPattern=src --coverage --collectCoverageFrom=**/*.js",
     "lint": "cross-env NODE_ENV=production eslint .",
     "lint:staged": "lint-staged",
     "format": "pretty-quick --staged",
     "precommit": "npm run lint:staged && npm run format"
   },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^25.1.0",
     "@types/node": "^13.5.1",
@@ -21,6 +25,7 @@
     "@typescript-eslint/parser": "^2.22.0",
     "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-node": "^11.0.0",
@@ -31,6 +36,12 @@
     "jest": "^25.1.0",
     "lint-staged": "^10.0.4",
     "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1"
-  }
+    "pretty-quick": "^2.0.1",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  },
+  "eslintIgnore": [
+    "!.eslintrc.js",
+    "node_modules"
+  ]
 }

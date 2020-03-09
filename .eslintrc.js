@@ -1,49 +1,50 @@
-const path = require('path')
+/* eslint-disable import/no-commonjs */
+const path = require('path') // eslint-disable-line
+const packageJson = require('./package.json') // eslint-disable-line
 
-/* User defined constants */
+const dependencies = Object.keys({
+  ...(packageJson.dependencies || {}),
+  ...(packageJson.devDependencies || {}),
+})
 
-const ecmaVersion = 11
-const minSupportedEcmaVersion = 10
-const browser = false
-const imports = true
-const node = true
-const babel = false
-const typescript = true
-
-const react = false
-const jquery = false
-const jest = false
-
-const checkStyling = false
-const indentSetting = 'tab'
-const semiSetting = 'always'
-
-/* End of user defined constants */
+const browser = dependencies.includes('webpack')
+const node = Boolean(packageJson.engines && packageJson.engines.node)
+const babel = dependencies.some(x => x.includes('babel'))
+const typescript = dependencies.some(x => x.includes('typescript'))
+const imports = dependencies.includes('eslint-plugin-import')
+const promise = dependencies.includes('eslint-plugin-promise')
+const react = dependencies.includes('react')
+const jquery = dependencies.includes('jquery')
+const jest = dependencies.includes('jest')
+const style = dependencies.includes('prettier') ? 'off' : 'warn'
 
 let configFile
 try {
-  configFile = require(typescript ? './tsconfig.json' : './jsconfig.json')
+  configFile = require(typescript ? './tsconfig.json' : './jsconfig.json') // eslint-disable-line
 } catch (e) {
   if (typescript) throw e
   configFile = {}
 }
-const { strict, strictNullChecks } = configFile.compilerOptions || {}
-
-const reactVersion = react && require('react').version // eslint-disable-line global-require
+const { strict, strictNullChecks, baseUrl } = configFile.compilerOptions || {}
+const esModules = configFile.compilerOptions.module.toLowerCase().startsWith('es')
+const modulePaths = baseUrl ? [path.resolve(__dirname, baseUrl)] : []
+const moduleExtensions = ['.js', '.jsx', '.json', '.node'].concat(typescript ? ['.ts', '.tsx'] : [])
 const tsPrefix = typescript ? '@typescript-eslint/' : ''
 
 const env = process.env.NODE_ENV || ''
 const isInProductionMode = env.includes('production')
-const isInStylingMode = env.includes('styl')
-const isStylingExplicitlyDisabled = env.includes('no-styl')
-const style = (checkStyling || isInStylingMode) && !isStylingExplicitlyDisabled ? 'warn' : 'off'
-
 const production_warn = isInProductionMode ? 'warn' : 'off'
 const production_error = isInProductionMode ? 'error' : 'warn'
 
+const indentSetting = 'tab'
+const semiSetting = 'always'
+const ecmaVersion = 11
+const minSupportedEcmaVersion = babel || typescript || node || react ? ecmaVersion : 5 // this is an assumption!
+
 module.exports = {
+  root: true,
   env: {
-    es6: ecmaVersion >= 6,
+    es6: true,
     browser,
     node,
     jest,
@@ -59,7 +60,7 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
     ecmaVersion,
-    project: typescript ? './tsconfig.json' : null,
+    project: typescript ? './tsconfig.lint.json' : null,
     ecmaFeatures: {
       impliedStrict: true,
       jsx: react,
@@ -71,7 +72,7 @@ module.exports = {
     typescript && '@typescript-eslint',
     imports && 'import',
     node && 'node',
-    ecmaVersion >= 6 && 'promise',
+    promise && 'promise',
   ]
     .flat()
     .filter(Boolean),
@@ -113,7 +114,7 @@ module.exports = {
           'done',
         ],
       ],
-      camelcase: 'off',
+      [`${tsPrefix}camelcase`]: 'off',
       'capitalized-comments': 'off',
       'class-methods-use-this': 'off',
       'comma-dangle': [
@@ -136,7 +137,7 @@ module.exports = {
       'constructor-super': 'error',
       curly: [style, 'multi-line'],
       'default-case': 'warn',
-      'default-case-last': 'error',
+      // 'default-case-last': 'error', // v7
       [`${tsPrefix}default-param-last`]: 'error',
       'dot-location': [style, 'property'],
       'dot-notation': 'warn', // is "suggestion" -> annoying
@@ -222,7 +223,7 @@ module.exports = {
       'no-dupe-else-if': 'error',
       'no-dupe-keys': 'error',
       'no-duplicate-case': 'error',
-      'no-duplicate-imports': 'off', // disabled in favor of import/no-duplicates
+      'no-duplicate-imports': imports ? 'off' : 'error',
       'no-else-return': 'warn',
       'no-empty': production_error, // should have justifying comment
       'no-empty-character-class': 'warn',
@@ -233,8 +234,8 @@ module.exports = {
       'no-ex-assign': 'warn',
       'no-extend-native': 'error',
       'no-extra-boolean-cast': 'warn',
-      'no-extra-bind': 'warn', // is "suggestion" -> not func eq
-      'no-extra-label': 'off', // is "suggestion" -> annoying  // no-labels
+      'no-extra-bind': 'warn',
+      'no-extra-label': 'off', // no-labels
       [`${tsPrefix}no-extra-parens`]: 'off', // useful for unambiguity
       [`${tsPrefix}no-extra-semi`]: style,
       'no-import-assign': 'error',
@@ -286,13 +287,13 @@ module.exports = {
       'no-redeclare': 'error',
       'no-regex-spaces': 'warn',
       'no-restricted-globals': 'error',
-      'no-restricted-exports': 'error',
+      // 'no-restricted-exports': 'error', // v7
       'no-restricted-imports': 'error',
       'no-restricted-modules': 'error',
       'no-restricted-properties': 'error',
       'no-restricted-syntax': 'error',
       'no-return-assign': 'error',
-      [`${tsPrefix}no-return-await`]: 'warn',
+      [`${typescript ? tsPrefix : 'no-'}return-await`]: 'warn',
       'no-script-url': 'warn',
       'no-self-assign': 'warn',
       'no-self-compare': 'warn',
@@ -332,7 +333,7 @@ module.exports = {
           functions: false,
         },
       ],
-      'no-useless-backreference': 'warn',
+      // 'no-useless-backreference': 'warn', // v7
       'no-useless-catch': 'warn',
       'no-useless-computed-key': 'warn',
       [`${tsPrefix}no-useless-constructor`]: 'warn',
@@ -446,12 +447,12 @@ module.exports = {
       'import/no-extraneous-dependencies': 'warn',
       'import/no-mutable-exports': 'off',
       'import/unambiguous': 'off',
-      'import/no-commonjs': 'off',
+      'import/no-commonjs': esModules ? 'error' : 'off',
       'import/no-amd': 'error',
       'import/no-nodejs-modules': 'off',
       'import/first': 'warn',
       'import/exports-last': 'off',
-      'import/no-duplicates': 'warn', // to replace no-duplicate-imports
+      'import/no-duplicates': 'warn',
       'import/no-namespace': 'warn',
       'import/extensions': 'off',
       'import/order': 'off',
@@ -630,36 +631,37 @@ module.exports = {
       'react-hooks/exhaustive-deps': 'warn',
     },
     node && {
+      // there are much more rules, need to check
       'node/no-callback-literal': 'off',
       'node/no-exports-assign': 'error',
       'node/no-extraneous-import': 'error',
       'node/no-extraneous-require': 'error',
-      'node/no-missing-import': 'error',
-      'node/no-missing-require': 'error',
+      'node/no-missing-import': 'off',
+      'node/no-missing-require': 'off',
       'node/no-unpublished-bin': 'error',
       'node/no-unpublished-import': 'off',
       'node/no-unpublished-require': 'off',
-      'node/no-unsupported-features/es-builtins': 'error',
-      'node/no-unsupported-features/es-syntax': 'error',
+      'node/no-unsupported-features/es-builtins': typescript || babel ? 'off' : 'error',
+      'node/no-unsupported-features/es-syntax': typescript || babel ? 'off' : 'error',
       'node/no-unsupported-features/node-builtins': 'error',
       'node/process-exit-as-throw': 'off',
       'node/shebang': 'off',
     },
-    ecmaVersion >= 6 && {
-      'promise/catch-or-return': ['warn', { allowThen: true, allowFinally: true }],
-      'promise/no-return-wrap': 'off',
-      'promise/param-names': 'warn',
+    promise && {
       'promise/always-return': 'off',
+      'promise/avoid-new': 'off',
+      'promise/catch-or-return': ['warn', { allowThen: true, allowFinally: true }],
+      'promise/no-callback-in-promise': 'warn',
       'promise/no-native': 'off',
       'promise/no-nesting': 'warn',
-      'promise/no-promise-in-callback': 'off',
-      'promise/no-callback-in-promise': 'warn',
-      'promise/avoid-new': 'off',
       'promise/no-new-statics': 'error',
+      'promise/no-promise-in-callback': 'off',
       'promise/no-return-in-finally': 'error',
-      'promise/valid-params': 'error',
-      'promise/prefer-await-to-then': 'off',
+      'promise/no-return-wrap': 'off',
+      'promise/param-names': 'warn',
       'promise/prefer-await-to-callbacks': 'off',
+      'promise/prefer-await-to-then': 'off',
+      'promise/valid-params': 'error',
     },
     typescript && {
       '@typescript-eslint/adjacent-overload-signatures': 'warn',
@@ -699,16 +701,18 @@ module.exports = {
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'error',
       '@typescript-eslint/no-non-null-assertion': strict || strictNullChecks ? 'error' : 'off',
       '@typescript-eslint/no-parameter-properties': 'off',
-      '@typescript-eslint/no-require-imports': 'error',
+      '@typescript-eslint/no-require-imports': !imports && esModules ? 'error' : 'off',
       '@typescript-eslint/no-this-alias': 'error',
       '@typescript-eslint/no-type-alias': 'off',
       '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
-      '@typescript-eslint/no-unnecessary-condition': 'errpr',
+      '@typescript-eslint/no-unnecessary-condition': __filename.endsWith('.eslintrc.js')
+        ? 'off'
+        : 'error',
       '@typescript-eslint/no-unnecessary-qualifier': 'error',
       '@typescript-eslint/no-unnecessary-type-arguments': 'warn',
       '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
       '@typescript-eslint/no-unused-vars-experimental': 'off',
-      '@typescript-eslint/no-var-requires': 'error',
+      '@typescript-eslint/no-var-requires': 'off',
       '@typescript-eslint/prefer-as-const': 'error',
       '@typescript-eslint/prefer-for-of': 'warn',
       '@typescript-eslint/prefer-function-type': 'off',
@@ -734,19 +738,13 @@ module.exports = {
     },
   ),
   settings: {
-    'import/resolver': {
-      node: {
-        paths: [
-          path.resolve(
-            __dirname,
-            (configFile.compilerOptions && configFile.compilerOptions.baseUrl) || '.',
-          ),
-        ],
-        extensions: ['.js', '.jsx'],
-      },
-    },
+    'import/resolver': browser
+      ? { webpack: { config: 'webpack.config.js' } }
+      : typescript
+      ? { typescript: {} }
+      : { node: { paths: modulePaths, extensions: moduleExtensions } },
     react: {
-      version: reactVersion,
+      version: 'detect',
     },
     minSupportedEcmaVersion,
   },

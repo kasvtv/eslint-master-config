@@ -7,19 +7,20 @@
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "preserveConstEnums": true,
-    "sourceMap": true,
-    "noImplicitUseStrict": true,
-    "esModuleInterop": true,
     "module": "ES6",
+    "esModuleInterop": true,
     "target": "es2020",
     "moduleResolution": "node",
+    "sourceMap": false,
+    "noImplicitUseStrict": true,
     "outDir": "dist",
-    "baseUrl": ".",
+    "baseUrl": "src",
+    "types": ["node", "jest"],
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]
+      "@modules/*": ["modules/*"]
     }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.test.js", "src/**/*.test.jsx"],
   "typeAcquisition": { "enable": true }
 }
